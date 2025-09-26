@@ -1,0 +1,66 @@
+<form method="post">
+    {% csrf_token %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>cash_amount</th>
+                <th>currency</th>
+                <th>declaration_date</th>
+                <th>dividend_type</th>
+                <th>ex_dividend_date</th>
+                <th>frequency</th>
+                <th>pay_date</th>
+                <th>record_date</th>
+                <th>ticker</th>
+                <th>share ownership</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in dividends %}
+            <tr>
+                <td>{{ item.cash_amount }}</td>
+                <td>{{ item.currency }}</td>
+                <td>{{ item.declaration_date }}</td>
+                <td>{{ item.dividend_type }}</td>
+                <td>{{ item.ex_dividend_date }}</td>
+                <td>{{ item.frequency }}</td>
+                <td>{{ item.pay_date }}</td>
+                <td>{{ item.record_date }}</td>
+                <td>{{ item.ticker }}</td>
+                <td>
+                    <input type="number" name="ownership_{{ forloop.counter0 }}">
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit">저장</button>
+</form>
+
+{% if results and results|length > 0 %}
+<br>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ticker</th>
+            <th>date</th>
+            <th>cash_amount</th>
+            <th>share ownership</th>
+            <th>cash_amount * share ownership</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in results %}
+        <tr>
+            {% if r.rowspan %}
+                <td rowspan="{{ r.rowspan }}">{{ r.ticker }}</td>
+            {% endif %}
+            <td>{{ r.year_month }}</td>
+            <td>{{ r.cash_amount }}</td>
+            <td>{{ r.ownership }}</td>
+            <td>{{ r.total }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
